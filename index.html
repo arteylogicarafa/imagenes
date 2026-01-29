@@ -191,6 +191,7 @@
             border: 1px solid rgba(0, 255, 163, 0.1);
         }
 
+
         .quality-label {
             display: flex;
             justify-content: space-between;
@@ -477,8 +478,8 @@
                     <line x1="12" y1="3" x2="12" y2="15"></line>
                 </svg>
                 <div class="upload-text">Arrastra tus imágenes aquí</div>
-                <div class="upload-hint">o haz clic para seleccionar (JPG, PNG)</div>
-                <input type="file" id="fileInput" accept="image/jpeg,image/png" multiple>
+                <div class="upload-hint">o haz clic para seleccionar (JPG, PNG, AVIF)</div>
+                <input type="file" id="fileInput" accept="image/jpeg,image/png,image/avif" multiple>
             </div>
 
             <div class="quality-control">
@@ -572,7 +573,9 @@
 
         function handleFiles(files) {
             selectedFiles = Array.from(files).filter(file => 
-                file.type === 'image/jpeg' || file.type === 'image/png'
+                file.type === 'image/jpeg' || 
+                file.type === 'image/png' || 
+                file.type === 'image/avif'
             );
 
             if (selectedFiles.length > 0) {
@@ -615,7 +618,7 @@
                 const webpBlob = await convertToWebP(file, quality);
                 convertedImages.push({
                     blob: webpBlob,
-                    name: file.name.replace(/\.(jpg|jpeg|png)$/i, '.webp'),
+                    name: file.name.replace(/\.(jpg|jpeg|png|avif)$/i, '.webp'),
                     originalSize: file.size,
                     newSize: webpBlob.size
                 });
