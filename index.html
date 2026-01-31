@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Conversor WebP - Sin Pérdida de Calidad</title>
+    <title>Conversor de Imágenes - WebP, JPG, PNG, AVIF</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@300;400;600;700&display=swap');
         
@@ -189,6 +189,82 @@
             background: rgba(0, 255, 163, 0.03);
             border-radius: 12px;
             border: 1px solid rgba(0, 255, 163, 0.1);
+        }
+
+        .format-selector {
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .format-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .format-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            padding: 20px 15px;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .format-option:hover {
+            border-color: rgba(0, 255, 163, 0.5);
+            background: rgba(0, 255, 163, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .format-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .format-option input[type="radio"]:checked ~ .format-label {
+            color: var(--accent);
+        }
+
+        .format-option input[type="radio"]:checked ~ .format-label .format-icon {
+            transform: scale(1.2);
+        }
+
+        .format-option:has(input:checked) {
+            border-color: var(--accent);
+            background: rgba(0, 255, 163, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 163, 0.2);
+        }
+
+        .format-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .format-icon {
+            font-size: 2rem;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .format-name {
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .format-desc {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            text-align: center;
         }
 
 
@@ -453,6 +529,10 @@
                 padding: 30px 20px;
             }
 
+            .format-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
             .action-buttons {
                 flex-direction: column;
             }
@@ -466,8 +546,8 @@
 <body>
     <div class="container">
         <header>
-            <h1>Conversor WebP</h1>
-            <p class="subtitle">Máxima calidad, mínimo tamaño</p>
+            <h1>Conversor de Imágenes</h1>
+            <p class="subtitle">Convierte a WebP, JPG, PNG o AVIF con máxima calidad</p>
         </header>
 
         <div class="main-card">
@@ -483,13 +563,53 @@
             </div>
 
             <div class="quality-control">
+                <div class="format-selector" style="margin-bottom: 30px;">
+                    <div class="quality-label" style="margin-bottom: 20px;">
+                        <span>Formato de Salida</span>
+                    </div>
+                    <div class="format-grid">
+                        <label class="format-option">
+                            <input type="radio" name="outputFormat" value="webp" checked>
+                            <span class="format-label">
+                                <span class="format-icon">🌐</span>
+                                <span class="format-name">WebP</span>
+                                <span class="format-desc">Mejor compatibilidad</span>
+                            </span>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="outputFormat" value="jpeg">
+                            <span class="format-label">
+                                <span class="format-icon">📷</span>
+                                <span class="format-name">JPG</span>
+                                <span class="format-desc">Universal</span>
+                            </span>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="outputFormat" value="png">
+                            <span class="format-label">
+                                <span class="format-icon">🎨</span>
+                                <span class="format-name">PNG</span>
+                                <span class="format-desc">Con transparencia</span>
+                            </span>
+                        </label>
+                        <label class="format-option">
+                            <input type="radio" name="outputFormat" value="avif">
+                            <span class="format-label">
+                                <span class="format-icon">⚡</span>
+                                <span class="format-name">AVIF</span>
+                                <span class="format-desc">Máxima compresión</span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
                 <div class="quality-label">
                     <span>Calidad de Conversión</span>
                     <span class="quality-value"><span id="qualityValue">100</span>%</span>
                 </div>
                 <input type="range" id="qualitySlider" min="1" max="100" value="100">
                 <div class="quality-note">
-                    100% = Sin pérdida (lossless) | 95-99% = Imperceptible | 80-94% = Alta calidad
+                    100% = Sin pérdida (lossless para WebP/PNG) | 95-99% = Imperceptible | 80-94% = Alta calidad
                 </div>
             </div>
 
@@ -516,14 +636,14 @@
             </div>
 
             <div class="action-buttons">
-                <button class="btn-primary" id="convertBtn" disabled>Convertir a WebP</button>
+                <button class="btn-primary" id="convertBtn" disabled>Convertir Imágenes</button>
                 <button class="btn-primary" id="downloadAllBtn" style="display: none;">Descargar Todo (.zip)</button>
                 <button class="btn-secondary" id="clearBtn" style="display: none;">Limpiar</button>
             </div>
         </div>
 
         <footer>
-            <p>Conversor 100% cliente-side • Sin subida de archivos • Tu privacidad garantizada</p>
+            <p>Conversor 100% cliente-side • WebP, JPG, PNG, AVIF • Sin subida de archivos • Tu privacidad garantizada</p>
             <p style="margin-top: 10px;">Hecho con <span style="color: var(--accent);">♥</span> para desarrolladores</p>
         </footer>
     </div>
@@ -613,14 +733,25 @@
             convertedImages = [];
 
             const quality = parseInt(qualitySlider.value) / 100;
+            const outputFormat = document.querySelector('input[name="outputFormat"]:checked').value;
+            
+            // Mapeo de formatos
+            const formatMap = {
+                'webp': { mime: 'image/webp', ext: '.webp' },
+                'jpeg': { mime: 'image/jpeg', ext: '.jpg' },
+                'png': { mime: 'image/png', ext: '.png' },
+                'avif': { mime: 'image/avif', ext: '.avif' }
+            };
+            
+            const format = formatMap[outputFormat];
 
             for (const file of selectedFiles) {
-                const webpBlob = await convertToWebP(file, quality);
+                const convertedBlob = await convertImage(file, quality, format.mime);
                 convertedImages.push({
-                    blob: webpBlob,
-                    name: file.name.replace(/\.(jpg|jpeg|png|avif)$/i, '.webp'),
+                    blob: convertedBlob,
+                    name: file.name.replace(/\.(jpg|jpeg|png|avif|webp)$/i, format.ext),
                     originalSize: file.size,
-                    newSize: webpBlob.size
+                    newSize: convertedBlob.size
                 });
             }
 
@@ -633,7 +764,7 @@
             convertBtn.disabled = false;
         });
 
-        async function convertToWebP(file, quality) {
+        async function convertImage(file, quality, mimeType) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -648,7 +779,7 @@
 
                         canvas.toBlob((blob) => {
                             resolve(blob);
-                        }, 'image/webp', quality);
+                        }, mimeType, quality);
                     };
                     img.src = e.target.result;
                 };
@@ -693,6 +824,7 @@
 
         downloadAllBtn.addEventListener('click', async () => {
             const zip = new JSZip();
+            const outputFormat = document.querySelector('input[name="outputFormat"]:checked').value;
 
             convertedImages.forEach(img => {
                 zip.file(img.name, img.blob);
@@ -702,7 +834,7 @@
             const url = URL.createObjectURL(content);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'imagenes-webp.zip';
+            a.download = `imagenes-${outputFormat}.zip`;
             a.click();
             URL.revokeObjectURL(url);
         });
@@ -714,7 +846,7 @@
             previewGrid.classList.remove('visible');
             stats.classList.remove('visible');
             convertBtn.disabled = true;
-            convertBtn.textContent = 'Convertir a WebP';
+            convertBtn.textContent = 'Convertir Imágenes';
             downloadAllBtn.style.display = 'none';
             clearBtn.style.display = 'none';
             fileInput.value = '';
